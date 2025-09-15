@@ -17,61 +17,52 @@ jobs:
     runs-on: self-hosted
     steps: 
       - name: Checkout
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v5
     
       - name: Azure Login
-        uses: Azure/login@v2.3.0
+        uses: azure/login@v2
         with:
-          client-id: 8c546d3e-0eeb-44e0-ab1b-a7d43bc20acf
-          tenant-id: af1a1d72-dd79-4bc0-8fc9-b305fe66df83
-          subscription-id: 4e7d9bde-4edb-4e22-a2ce-020148cad621
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
             
       - name: Terraform fmt
-        id: fmt
         run: terraform fmt -check
         continue-on-error: true
         working-directory: environments/prod
         
       - name: Terraform Init
-        id: init
         run: terraform init -input=false  
         working-directory: environments/prod
 
       - name: Terraform Validate
-        id: validate
         run: terraform validate -no-color
         working-directory: environments/prod        
       
       - name: Terraform Plan
-        id: plan
         run: terraform plan -no-color -input=false
-        continue-on-error: true
         working-directory: environments/prod    
         
   terraform-apply:    
     runs-on: self-hosted
-    if: github.ref == 'refs/heads/main'
     needs: terraform-init-plan
     environment: prod
     steps:
       - name: Checkout
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v5
     
       - name: Azure Login
-        uses: Azure/login@v2.3.0
+        uses: azure/login@v2
         with:
-          client-id: 8c546d3e-0eeb-44e0-ab1b-a7d43bc20acf
-          tenant-id: af1a1d72-dd79-4bc0-8fc9-b305fe66df83
-          subscription-id: 4e7d9bde-4edb-4e22-a2ce-020148cad621 
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           
       - name: Terraform Init
-        id: init
         run: terraform init -input=false  
         working-directory: environments/prod
 
       - name: Terraform Apply
-        id: apply
         run: terraform apply --auto-approve
-        continue-on-error: true
-        working-directory: environments/prod              
+        working-directory: environments/prod         
           
