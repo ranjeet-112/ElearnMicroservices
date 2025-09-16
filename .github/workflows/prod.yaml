@@ -9,7 +9,7 @@ on:
       - main      
 
 permissions:
-  id-token: write
+  id-token: write   # OIDC ke liye zaruri
   contents: read
   
 jobs: 
@@ -17,7 +17,7 @@ jobs:
     runs-on: self-hosted
     steps: 
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v3
     
       - name: Azure Login (OIDC)
         uses: azure/login@v2
@@ -47,9 +47,10 @@ jobs:
     runs-on: self-hosted
     needs: terraform-init-plan
     environment: prod
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v3
     
       - name: Azure Login (OIDC)
         uses: azure/login@v2
@@ -64,4 +65,4 @@ jobs:
 
       - name: Terraform Apply
         run: terraform apply --auto-approve
-        working-directory: environments/prod     
+        working-directory: environments/prod   
