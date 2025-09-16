@@ -9,7 +9,7 @@ on:
       - main      
 
 permissions:
-  id-token: write
+  id-token: write   # OIDC ke liye zaruri
   contents: read
   
 jobs: 
@@ -17,61 +17,52 @@ jobs:
     runs-on: self-hosted
     steps: 
       - name: Checkout
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v3
     
-      - name: Azure Login
-        uses: Azure/login@v2.3.0
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
         with:
-          client-id: ff27bcf6-f60c-4a57-8b01-8eee5de2a9cd
-          tenant-id: 0f7010fd-209e-4344-8457-043ffb37143b
-          subscription-id: 1075ec7a-b17a-4f37-bf3f-9d68c4506dc1
-            
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        
       - name: Terraform fmt
-        id: fmt
         run: terraform fmt -check
         continue-on-error: true
         working-directory: environments/prod
         
       - name: Terraform Init
-        id: init
         run: terraform init -input=false  
         working-directory: environments/prod
 
       - name: Terraform Validate
-        id: validate
         run: terraform validate -no-color
         working-directory: environments/prod        
       
       - name: Terraform Plan
-        id: plan
         run: terraform plan -no-color -input=false
-        continue-on-error: true
         working-directory: environments/prod    
         
   terraform-apply:    
     runs-on: self-hosted
-    if: github.ref == 'refs/heads/main'
     needs: terraform-init-plan
     environment: prod
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v3
     
-      - name: Azure Login
-        uses: Azure/login@v2.3.0
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
         with:
-          client-id: ff27bcf6-f60c-4a57-8b01-8eee5de2a9cd
-          tenant-id: 0f7010fd-209e-4344-8457-043ffb37143b
-          subscription-id: 1075ec7a-b17a-4f37-bf3f-9d68c4506dc1   
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           
       - name: Terraform Init
-        id: init
         run: terraform init -input=false  
         working-directory: environments/prod
 
       - name: Terraform Apply
-        id: apply
         run: terraform apply --auto-approve
-        continue-on-error: true
-        working-directory: environments/prod              
-          
+        working-directory: environments/prod   
