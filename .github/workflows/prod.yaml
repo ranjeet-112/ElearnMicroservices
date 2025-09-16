@@ -26,7 +26,7 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-          auth-type: SERVICE_PRINCIPAL
+          
             
       - name: Terraform fmt
         run: terraform fmt -check
@@ -60,7 +60,7 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-          auth-type: SERVICE_PRINCIPALL
+          
           
       - name: Terraform Init
         run: terraform init -input=false  
