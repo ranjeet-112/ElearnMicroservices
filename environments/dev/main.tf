@@ -28,8 +28,8 @@ module "sql_server" {
   sql_server_name = "sql-dev-Elearn-01"
   rg_name         = "rg-dev-Elearn"
   location        = "centralindia"
-  admin_username  = "devopsadmin"
-  admin_password  = "P@ssw01rd@123"
+  admin_username  = "admin112"
+  admin_password  = "administrator@112"
   tags            = local.common_tags
 }
 
@@ -49,6 +49,8 @@ module "aks" {
   location   = "centralindia"
   rg_name    = "rg-dev-Elearn"
   dns_prefix = "aks-dev-Elearn"
+  node_count = "1"
+  vm_size    = "Standard_D2_v2"
   tags       = local.common_tags
 }
 

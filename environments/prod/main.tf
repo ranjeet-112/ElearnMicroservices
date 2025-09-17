@@ -51,6 +51,8 @@ module "aks" {
   location   = "centralindia"
   rg_name    = "rg-prod-Elearn"
   dns_prefix = "aks-prod-todoapp"
+  node_count = "1"
+  vm_size    = "Standard_D2_v2"
   tags       = local.common_tags
 }
 
