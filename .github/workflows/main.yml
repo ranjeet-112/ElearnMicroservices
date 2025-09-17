@@ -22,9 +22,9 @@ jobs:
       - name: Azure Login (OIDC)
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-id: 3d62d47f-71f5-49b1-aed5-8ce8a45728e4
+          tenant-id: 986adbd0-1687-41ed-9818-bd58c967382b
+          subscription-id: 239f86cf-d0d2-4954-935f-40e39253100c
         
       - name: Terraform fmt
         run: terraform fmt -check
@@ -55,9 +55,9 @@ jobs:
       - name: Azure Login (OIDC)
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-id: 3d62d47f-71f5-49b1-aed5-8ce8a45728e4
+          tenant-id: 986adbd0-1687-41ed-9818-bd58c967382b
+          subscription-id: 239f86cf-d0d2-4954-935f-40e39253100c
           
       - name: Terraform Init
         run: terraform init -input=false  
