@@ -38,7 +38,7 @@ module "sql_server" {
 module "sql_db" {
   depends_on  = [module.sql_server]
   source      = "../../modules/azurerm_sql_database"
-  sql_db_name = "sqldb-prod-todoapp"
+  sql_db_name = "sqldbdevelearn"
   server_id   = module.sql_server.server_id
   max_size_gb = "2"
   tags        = local.common_tags
