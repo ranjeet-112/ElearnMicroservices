@@ -16,6 +16,7 @@ permissions:
 jobs: 
   terraform-init-plan:
     runs-on: self-hosted
+    environment: dev
     steps: 
       - name: Checkout
         uses: actions/checkout@v3
@@ -23,31 +24,31 @@ jobs:
       - name: Azure Login (OIDC)
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-id: 3d62d47f-71f5-49b1-aed5-8ce8a45728e4
+          tenant-id: 986adbd0-1687-41ed-9818-bd58c967382b
+          subscription-id: 239f86cf-d0d2-4954-935f-40e39253100c
         
       - name: Terraform fmt
         run: terraform fmt -check
         continue-on-error: true
-        working-directory: environments/prod
+        working-directory: environments/dev
         
       - name: Terraform Init
         run: terraform init -input=false  
-        working-directory: environments/prod
+        working-directory: environments/dev
 
       - name: Terraform Validate
         run: terraform validate -no-color
-        working-directory: environments/prod        
-      
+        working-directory: environments/dev
+
       - name: Terraform Plan
         run: terraform plan -no-color -input=false
-        working-directory: environments/prod    
-        
-  terraform-apply:    
+        working-directory: environments/dev
+
+  terraform-apply:
     runs-on: self-hosted
+    environment: dev
     needs: terraform-init-plan
-    environment: prod
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout
@@ -56,14 +57,14 @@ jobs:
       - name: Azure Login (OIDC)
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          
+          client-id: 3d62d47f-71f5-49b1-aed5-8ce8a45728e4
+          tenant-id: 986adbd0-1687-41ed-9818-bd58c967382b
+          subscription-id: 239f86cf-d0d2-4954-935f-40e39253100c
+
       - name: Terraform Init
         run: terraform init -input=false  
-        working-directory: environments/prod
+        working-directory: environments/dev
 
       - name: Terraform Apply
         run: terraform apply --auto-approve
-        working-directory: environments/prod  
+        working-directory: environments/dev
