@@ -15,6 +15,7 @@ permissions:
 jobs: 
   terraform-init-plan:
     runs-on: self-hosted
+    environment: prod
     steps: 
       - name: Checkout
         uses: actions/checkout@v3
@@ -45,8 +46,8 @@ jobs:
         
   terraform-apply:    
     runs-on: self-hosted
-    needs: terraform-init-plan
     environment: prod
+    needs: terraform-init-plan
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout
