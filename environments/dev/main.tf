@@ -25,7 +25,7 @@ module "acr" {
 module "sql_server" {
   depends_on      = [module.rg]
   source          = "../../modules/azurerm_sql_server"
-  sql_server_name = "sql-dev-Elearn-01"
+  sql_server_name = "sql-dev-elearn-01"
   rg_name         = "rg-dev-Elearn"
   location        = "centralindia"
   admin_username  = "admin112"
